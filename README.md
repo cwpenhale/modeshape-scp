@@ -29,3 +29,9 @@ This little project is a proof-of-concept for a way to connect your JAAS-enabled
 ```
 
 Hope this helps someone! Email me if you have questions or suggestions!
+
+#### TODO:
+
+1. Ask the Modeshape and Mina guys if there's a way to get the JAAS contexts to cooperate, so that one doesn't have to use JcrCredentialCallbackJaasPasswordAuthenticator.java
+2. Download files via SCP
+3. More functionality in JCRSSHFile.java
