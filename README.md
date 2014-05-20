@@ -30,6 +30,14 @@ This little project is a proof-of-concept for a way to connect your JAAS-enabled
 
 Hope this helps someone! Email me if you have questions or suggestions!
 
+#### How it works:
+
+1. SFTPServer starts up as a singleton, and sets up an Apache Mina SSHD server, which is configured to view the filesystem with JCRFileSystemFactory (sshd.setFileSystemFactory(new JCRFileSystemFactory());) and handle logins with JcrCredentialCallbackJaasPasswordAuthenticator (sshd.setPasswordAuthenticator(pswdAuth);)
+2. Login attempts have their password saved to the session by JcrCredentialCallbackJaasPasswordAuthenticator
+3. A file is uploaded (ScpCommand: scp -t aFile), which triggers the filesystem factory, which returns a JCRFileSystemView, which returns a JCRSSHFile
+4. The method JCRSSHFile.createOutputStream(long) is called, which contains an anonymous inner-class based on FileOutputStream that, during the close() method, uses the JcrTools from Modeshape to upload the file into JCR, set ACLs, and print some information, closing the session when complete.
+
+
 #### TODO:
 
 1. Ask the Modeshape and Mina guys if there's a way to get the JAAS contexts to cooperate, so that one doesn't have to use JcrCredentialCallbackJaasPasswordAuthenticator.java
